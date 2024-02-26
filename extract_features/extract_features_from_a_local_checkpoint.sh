@@ -4,14 +4,14 @@
 ########################## PARAMETERS THAT NEED TO BE SET ##########################
 ####################################################################################
 
-DATA_PATH= # path/to/video/folder/
-METADATA_CSV_FILENAME= # path/to/metadata/csv/file. Use the ones provided in the data folder.
+DATA_PATH=/data/i5O/THUMOS14/actionformer_subset_30fps/test/ # path/to/video/folder/
+METADATA_CSV_FILENAME=/root/models/TSP/data/thumos14/thumos14_test_metadata.csv # path/to/metadata/csv/file. Use the ones provided in the data folder.
 
-LOCAL_CHECKPOINT= # path/to/local/checkpoint/file.pth
-BACKBONE= # Set the backbone used in the LOCAL_CHECKPOINT: r2plus1d_34, r2plus1d_18, or r3d_18
+LOCAL_CHECKPOINT=/root/models/TSP/weights/r2plus1d_34-tsp_on_thumos14-max_gvf-backbone_lr_0.0001-fc_lr_0.004-epoch_4-e6a30b2f.pth # path/to/local/checkpoint/file.pth
+BACKBONE=r2plus1d_34 # Set the backbone used in the LOCAL_CHECKPOINT: r2plus1d_34, r2plus1d_18, or r3d_18
 
 # Choose the stride between clips, e.g. 16 for non-overlapping clips and 1 for dense overlapping clips
-STRIDE=16 
+STRIDE=1 
 
 # Optional: Split the videos into multiple shards for parallel feature extraction
 # Increase the number of shards and run this script independently on separate GPU devices,
@@ -51,7 +51,7 @@ fi
 
 OUTPUT_DIR=output/local_checkpoint_${BACKBONE}_features/stride_${STRIDE}/
 
-source activate tsp
+source activate tsp-cuda113
 mkdir -p $OUTPUT_DIR
 
 python extract_features.py \

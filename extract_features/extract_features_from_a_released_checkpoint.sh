@@ -4,8 +4,8 @@
 ########################## PARAMETERS THAT NEED TO BE SET ##########################
 ####################################################################################
 
-DATA_PATH= # path/to/video/folder
-METADATA_CSV_FILENAME= # path/to/metadata/csv/file. Use the ones provided in the data folder.
+DATA_PATH=/data/i5O/THUMOS14/actionformer_subset_30fps/valid/ # path/to/video/folder
+METADATA_CSV_FILENAME=/root/models/TSP/data/thumos14/thumos14_valid_metadata_generated.csv # path/to/metadata/csv/file. Use the ones provided in the data folder.
 
 ##############################
 ### RELEASED GITHUB MODELS ###
@@ -28,10 +28,10 @@ METADATA_CSV_FILENAME= # path/to/metadata/csv/file. Use the ones provided in the
 # r3d_18-tsp_on_activitynet
 # r3d_18-tac_on_activitynet
 # r3d_18-tac_on_kinetics
-RELEASED_CHECKPOINT=r2plus1d_34-tsp_on_activitynet # choose one of the models above
+RELEASED_CHECKPOINT=r2plus1d_34-tsp_on_thumos14 # choose one of the models above
 
 # Choose the stride between clips, e.g. 16 for non-overlapping clips and 1 for dense overlapping clips
-STRIDE=16 
+STRIDE=1 
 
 # Optional: Split the videos into multiple shards for parallel feature extraction
 # Increase the number of shards and run this script independently on separate GPU devices,
@@ -39,7 +39,9 @@ STRIDE=16
 # Each shard will process (num_videos / NUM_SHARDS) videos.
 SHARD_ID=0
 NUM_SHARDS=1
-DEVICE=cuda:0
+DEVICE=cuda:1
+BATCH_SIZE=96
+WORKERS=4
 
 if [ -z "$DATA_PATH" ]; then
     echo "DATA_PATH variable is not set."
@@ -59,7 +61,7 @@ fi
 
 OUTPUT_DIR=output/${RELEASED_CHECKPOINT}_features/stride_${STRIDE}/
 
-source activate tsp
+source activate tsp-cuda113
 mkdir -p $OUTPUT_DIR
 
 python extract_features.py \
@@ -69,5 +71,7 @@ python extract_features.py \
 --stride $STRIDE \
 --shard-id $SHARD_ID \
 --num-shards $NUM_SHARDS \
+--batch-size $BATCH_SIZE \
+--workers $WORKERS \
 --device $DEVICE \
 --output-dir $OUTPUT_DIR
