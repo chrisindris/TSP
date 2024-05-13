@@ -20,6 +20,7 @@ from common import utils
 from common import transforms as T
 from models.model import Model
 
+import pdb
 
 MODEL_URLS = {
     # main TSP models

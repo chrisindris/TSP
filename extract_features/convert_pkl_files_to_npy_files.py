@@ -19,7 +19,7 @@ def main(args):
     Path(args.output_folder).mkdir(parents=True, exist_ok=True)
 
     for f in tqdm(filenames):
-        video_name = os.path.basename(f).split(".pkl")[0]
+        video_name = os.path.basename(f).split(".pkl")[0].replace("videos_", "")
         output_f = os.path.join(args.output_folder, video_name + ".npy")
 
         data = pkl.load(open(f, "rb"))
